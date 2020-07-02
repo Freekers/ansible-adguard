@@ -51,7 +51,7 @@
     when: ufw == "true"
     ufw:
       rule: allow
-      state: enable
+      state: enabled
       proto: any
       port: '{{ item }}'
     loop:
