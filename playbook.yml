@@ -86,6 +86,7 @@
 
   - name: Prepare Docker for IPv6
     when: ansible_default_ipv6.address | length > 0
+    ignore_errors: yes
     blockinfile:
       path: /etc/docker/daemon.json
       marker: ""
