@@ -228,6 +228,7 @@
 
   - name: Add Adguard IPv6 as resolver for localhost
     when: ansible_default_ipv6.address | length > 0
+    ignore_errors: yes
     lineinfile:
       dest: /etc/resolvconf/resolv.conf.d/head
       line: 'nameserver {{ ansible_default_ipv6.address }}'
