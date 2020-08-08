@@ -241,6 +241,7 @@
 # If you have a better method that sticks after a reboot, please open a PR. Thanks!
   - name: Quick and Dirty way to make sure ip6table rules stick after reboot
     when: ansible_default_ipv6.address | length > 0
+    ignore_errors: yes
     include_role:
        name: oefenweb.rc_local
        apply:
@@ -252,6 +253,7 @@
 
   - name: Make sure DNS resolver sticks after reboot
     when: ansible_default_ipv6.address | length == 0
+    ignore_errors: yes
     include_role:
        name: oefenweb.rc_local
        apply:
