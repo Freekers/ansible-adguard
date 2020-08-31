@@ -15,7 +15,7 @@ services:
      - CRON="${CRON}"
 
   letsencrypt:
-    image: linuxserver/letsencrypt:latest
+    image: linuxserver/swag:latest
     container_name: letsencrypt-${HOSTNAME}
     restart: always
     cap_add:
