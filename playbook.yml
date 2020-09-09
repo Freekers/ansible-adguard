@@ -85,7 +85,7 @@
       key: adguard
 
   - name: Prepare Docker for IPv6
-    when: ansible_default_ipv6.address | length > 0
+    when: ansible_default_ipv6.address is defined
     blockinfile:
       path: /etc/docker/daemon.json
       marker: ""
@@ -226,7 +226,7 @@
       replace: 'nameserver {{ ansible_default_ipv4.address }}'
 
   - name: Add Adguard IPv6 as resolver for localhost
-    when: ansible_default_ipv6.address | length > 0
+    when: ansible_default_ipv6.address is defined
     lineinfile:
       dest: /etc/resolvconf/resolv.conf.d/head
       line: 'nameserver {{ ansible_default_ipv6.address }}'
@@ -238,7 +238,7 @@
 # Workaround to make sure our DNS resolver is still being used after a reboot.
 # If you have a better method that sticks after a reboot, please open a PR. Thanks!
   - name: Quick and Dirty way to make sure ip6table rules stick after reboot
-    when: ansible_default_ipv6.address | length > 0
+    when: ansible_default_ipv6.address is defined
     include_role:
        name: oefenweb.rc_local
        apply:
@@ -249,7 +249,7 @@
            - resolvconf -u
 
   - name: Make sure DNS resolver sticks after reboot
-    when: ansible_default_ipv6.address | length == 0
+    when: ansible_default_ipv6.address is not defined
     include_role:
        name: oefenweb.rc_local
        apply:
