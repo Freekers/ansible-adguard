@@ -47,13 +47,6 @@ Supported distros:
 - Ubuntu 18.04 & 20.04
 - Debian 9 & 10
 
-Supported architectures:
-- Baremetal (x86 & x64)
-- KVM
-- Xen
-
-OpenVZ is _NOT_ supported, as the entire stack runs on Docker.
-
 ## Usage Instructions
 After installation, you can access the AdGuard Home admin interface of your instance by navigating to yourdomain.com. You should automatically be redirected to the login screen of your AdGuard Home instance.   
 Please remember that it can take up to 5 minutes before your AdGuard Home instance will be accessible after installation due to Let's Encrypt's certificate creation process. AdGuard Home will _not_ start before a valid SSL certificate has been generated, so please be patient!
