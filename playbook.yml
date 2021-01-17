@@ -3,6 +3,17 @@
 
 - hosts: adguard
   become: true
+  vars:
+    pip_package: python3-pip
+    docker_install_compose: true
+    docker_users:
+      - adguard
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker_arm
+
+- hosts: adguard
+  become: true
   tasks:
   - name: Update and upgrade apt packages
     apt:
@@ -18,7 +29,6 @@
       - ufw
       - curl
       - tzdata
-      - python3-pip
       - python3-websocket
       - python3-setuptools
       - resolvconf
@@ -32,7 +42,6 @@
       packages:
       - curl
       - tzdata
-      - python3-pip
       - python3-websocket
       - python3-setuptools
       - resolvconf
@@ -43,7 +52,7 @@
       name: "{{ timezone }}"
 
   - name: install galaxy roles
-    command: ansible-galaxy install -r "{{ playbook_dir }}/requirements.yml"
+    command: ansible-galaxy install -r "{{ playbook_dir }}/requirements.yml" --force
     delegate_to: localhost
     become: false
 
@@ -96,21 +105,11 @@
         }
       create: yes
 
-  - name: Install Docker and docker-compose
-    include_role:
-       name: geerlingguy.docker
-    vars:
-      - docker_package_state: latest
-      - docker_install_compose: true
-      - docker_compose_version: "1.25.5"
-      - docker_users:
-        - adguard
-
-  - name: Install docker and docker-compose, for use with Ansible docker module
-    pip:
-      name: 
-        - docker
-        - docker-compose
+  - name: Restart Docker service to load changes in daemon.json
+    when: ansible_default_ipv6.address is defined
+    service:
+      name: docker
+      state: restarted
 
   - name: Create directories
     file:

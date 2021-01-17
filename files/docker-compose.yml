@@ -47,15 +47,12 @@ services:
       - unbound
       
   unbound:
-     image: secns/unbound:latest
+     image: klutchell/unbound:latest
      restart: always
      container_name: unbound-${HOSTNAME}
-     environment:
-      - DO_IPV6=no
-      - HIDE_VERSION=yes
      volumes:
-      - /opt/adguard/adguard-unbound.conf:/etc/unbound/unbound.conf.d/adguard.conf
-      - /opt/adguard/root.hints:/var/lib/unbound/root.hints
+      - /opt/adguard/adguard-unbound.conf:/opt/unbound/etc/unbound/unbound.conf
+      - /opt/adguard/root.hints:/opt/unbound/etc/unbound/root.hints
      ports:
       - "5353:53/tcp"
       - "5353:53/udp"
