@@ -1,0 +1,62 @@
+---
+# Create users and let them sudo without passwd. Upload their SSH keys.
+# - name: Ensure groups exists
+#   ansible.builtin.group:
+#     name: "{{ item.naam }}"
+#     state: present
+#   with_items: "{{ groep }}"
+
+- name: "Create user accounts and add users to groups"
+  ansible.builtin.user:
+    name: "{{ item.username }}"
+    groups: "{{ item.groups }}"
+    shell: "/bin/zsh"
+  with_items: "{{ users }}"
+  tags: add_users
+
+- name: "Add authorized keys"
+  ansible.posix.authorized_key:
+    user: "{{ item.username }}"
+    key: "{{ lookup('file', 'ssh-keys/' + item.username + '.key.pub') }}"
+  when: item.username != "podman" or item.username != "docker"
+  with_items: "{{ users }}"
+  tags: add_users
+
+- name: "Allow sudo users to sudo without a password Rocky Linux"
+  ansible.builtin.lineinfile:
+    dest: "/etc/sudoers"
+    state: "present"
+    regexp: "^%wheel"
+    line: "%wheel ALL=(ALL) NOPASSWD: ALL"
+  when: ansible_os_family == "RedHat"
+  tags: add_users
+
+- name: "Allow sudo users to sudo without a password Debian"
+  ansible.builtin.lineinfile:
+    dest: "/etc/sudoers"
+    state: "present"
+    regexp: "^%sudo"
+    line: "%sudo ALL=(ALL) NOPASSWD: ALL"
+  when: ansible_os_family == 'Debian'
+  tags: add_users
+
+- name: "Remove old user accounts in remove_users"
+  ansible.builtin.user:
+    name: "{{ item }}"
+    state: "absent"
+    remove: true
+  with_items: "{{ remove_users }}"
+  tags: remove_users
+
+- name: "Create .gitconfig for each user"
+  ansible.builtin.template:
+    src: "files/.gitconfig.j2"
+    dest: "/home/{{ item.username }}/.gitconfig"
+    owner: "{{ item.username }}"
+    group: "{{ item.username }}"
+    mode: "0644"
+    remote_src: false
+  become: true
+  when: item.username != "podman" or item.username != "docker"
+  with_items: "{{ users }}"
+  tags: add_users

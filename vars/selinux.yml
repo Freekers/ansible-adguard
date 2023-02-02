@@ -1,0 +1,17 @@
+---
+# Rest is uncommented and will be handedeld by the role.
+# The state, either disabled, permissive or enforcing.
+# selinux_state: enforcing
+
+# The policy, default: see vars/main.yml.
+# The policy differs per distribution, mostly because Debian and Ubuntu use 'default' and other distributions use 'targeted'.
+# selinux_policy: "{{ _selinux_policy[ansible_os_family] | default(_selinux_policy['default']) }}"
+
+# Should the machine be rebooted after changes?
+# selinux_reboot: yes
+# You can enable (or disable) booleans by specifying them in this list.
+# selinux_booleans:
+#   - name: http_can_network_connect
+#   - name: abrt_anon_write
+#     state: no
+#     persistent: no

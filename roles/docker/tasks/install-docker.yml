@@ -1,0 +1,61 @@
+---
+- name: Stop conflicting services that occupy needed ports (53,80,443)
+  become: true
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: false
+    state: stopped
+  register: results
+  loop:
+    # - systemd-resolved
+    # - dnsmasq
+    - apache2
+    - lighttpd
+    - nginx
+  failed_when: >-
+    results is failed and
+    "Could not find the requested service" not in results.msg|default('')
+
+- name: Temporarily use this nameserver during initial config and setup
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/resolved.conf
+    regexp: "#DNS="
+    line: "DNS=9.9.9.9"
+
+- name: Disable internal DNS
+  ansible.builtin.lineinfile:
+    path: /etc/systemd/resolved.conf
+    regexp: "#DNSStubListener=yes"
+    line: "DNSStubListener=no"
+
+- name: Restart service httpd, in all cases
+  ansible.builtin.service:
+    name: systemd-resolved
+    state: restarted
+
+- name: Install Docker and docker-compose
+  ansible.builtin.include_role:
+    name: "geerlingguy.docker"
+  vars:
+    docker_install_compose: false
+    docker_install_compose_plugin: true
+    docker_users:
+      - docker
+
+- name: Create directory if they don't exist
+  ansible.builtin.file:
+    path: "/srv/docker"
+    state: directory
+    owner: docker
+    group: docker
+    mode: 0775
+
+- name: Create directory if they don't exist
+  ansible.builtin.file:
+    path: "/srv/docker/{{ item }}"
+    state: directory
+    owner: docker
+    group: docker
+    mode: 0775
+  with_items: "{{ folders }}"
+  tags: test

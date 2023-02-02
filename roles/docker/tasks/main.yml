@@ -1,0 +1,17 @@
+---
+- name: Install Docker
+  ansible.builtin.include_tasks: install-docker.yml
+  tags:
+    - test
+
+- name: Restart docker to make sure iptables are correct
+  ansible.builtin.service:
+    name: docker
+    state: restarted
+  tags: firewall
+
+- name: Run Docker Compose
+  ansible.builtin.include_tasks: run-docker-compose.yml
+  tags:
+    - install-containers
+    - test

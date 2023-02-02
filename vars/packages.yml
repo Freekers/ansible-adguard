@@ -1,0 +1,9 @@
+---
+packages:
+  - "zsh"
+  - "git"
+  - "vim"
+  - "htop"
+  - "unzip"
+  - "nano"
+  - "apache2-utils"

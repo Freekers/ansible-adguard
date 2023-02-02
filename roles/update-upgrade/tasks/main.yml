@@ -1,0 +1,52 @@
+---
+- name: Apt update Debian
+  ansible.buildin.apt:
+    update_cache: true
+  when: apt_update and ansible_os_family == 'Debian'
+
+- name: Remove dependencies that are no longer required Debian
+  ansible.buildin.apt:
+    autoremove: true
+  when: apt_autoremove and ansible_os_family == 'Debian'
+
+- name: Remove useless packages from the cache Debian
+  ansible.buildin.apt:
+    autoclean: true
+  when: apt_autoclean and ansible_os_family == 'Debian'
+
+- name: Update all packages to their latest version Debian
+  ansible.buildin.apt:
+    name: "*"
+    state: latest
+  when: upgrade_packages and ansible_os_family == 'Debian'
+
+- name: Upgrade the OS (apt-get dist-upgrade) Debian
+  ansible.buildin.apt:
+    upgrade: dist
+  when: dist_upgrade and ansible_os_family == 'Debian'
+
+- name: Apt update RedHat
+  ansible.buildin.dnf:
+    update_cache: true
+  when: apt_update and ansible_os_family == 'RedHat'
+
+- name: Remove dependencies that are no longer required RedHat
+  ansible.buildin.dnf:
+    autoremove: true
+  when: apt_autoremove and ansible_os_family == 'RedHat'
+
+- name: Remove useless packages from the cache RedHat
+  ansible.buildin.dnf:
+    autoclean: true
+  when: apt_autoclean and ansible_os_family == 'RedHat'
+
+- name: Update all packages to their latest version RedHat
+  ansible.buildin.dnf:
+    name: "*"
+    state: latest
+  when: upgrade_packages and ansible_os_family == 'RedHat'
+
+- name: Upgrade the OS (apt-get dist-upgrade) RedHat
+  ansible.buildin.dnf:
+    upgrade: dist
+  when: dist_upgrade and ansible_os_family == 'RedHat'

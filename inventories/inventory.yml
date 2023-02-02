@@ -1,0 +1,8 @@
+all:
+  hosts:
+    webhosting:
+      ansible_host: 11.22.33.44.55
+      ansible_user: ubuntu
+      # ansible_python_interpreter: /usr/bin/python3.6
+      ansible_ssh_private_key_file: /path/to/pub/key
+      ansible_ssh_common_args: "-o StrictHostKeyChecking=no"

@@ -1,0 +1,6 @@
+---
+# Timezone used for dashboard and in containers for logging, cronjobs etc.
+# List of timezones that can be specified: https://docs.diladele.com/docker/timezones.html
+ntp_enabled: true
+ntp_timezone: Europe/Berlin
+ntp_area: "Europe"

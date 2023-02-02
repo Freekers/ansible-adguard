@@ -1,0 +1,22 @@
+---
+- name: Remove dependencies that are no longer required Debian
+  ansible.builtin.apt:
+    autoclean: true
+    autoremove: true
+  when:
+    - ansible_os_family == 'Debian'
+
+- name: Autoremove unneeded packages installed as dependencies Rocky
+  ansible.builtin.dnf:
+    autoremove: true
+  when:
+    - ansible_os_family == 'RedHat'
+
+- name: Display post install message
+  ansible.builtin.debug:
+    msg:
+      - "*** AdGuard Home Installation Completed Successfully! ***"
+      - "*** The admin interface of your instance can be accessed via {{ hostname }} using password: {{ adguardwebpassword }}"
+      - "*** NOTE: It can take up to 5 minutes before AdGuard Home will be accessible ***"
+      - "*** This is due to Lets Encrypt certificate creation process, please be patient! ***"
+      - "*** For more information, please refer to the Usage Instructions in the README ***"

@@ -1,0 +1,19 @@
+---
+# Rest is uncommented and will be handedeld by the role.
+# See the defaults for OS-specific vars inside the vars/ directory.
+# clamav_packages: []
+# clamav_daemon_config_path: ''
+
+# clamav_daemon_configuration_changes:
+#   - regexp: '^.*Example$'
+#     state: absent
+#   - regexp: '^.*LocalSocket .*$'
+#     line: 'LocalSocket {{ clamav_daemon_localsocket }}'
+
+# clamav_daemon: 'clamav-daemon'
+# clamav_daemon_state: started
+# clamav_daemon_enabled: true
+
+# clamav_freshclam_daemon: 'clamav-freshclam'
+# clamav_freshclam_daemon_state: started
+# clamav_freshclam_daemon_enabled: true

@@ -348,3 +348,8 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+
+*.retry
+.vagrant/
+terraform.tfstate
+.DS_Store

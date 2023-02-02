@@ -1,0 +1,78 @@
+http:
+  middlewares:
+    # Redirect non-www URLs to their www equivalent make sure to use: Host(`domain.com`) || Host(`www.domain.com`) for the hosted site
+    # Use with - "traefik.http.routers.Irisdegraafcom.middlewares=redirect-non-www-to-www@file"
+    redirect-non-www-to-www:
+      # Redirect a request from an url to another with regex matching and replacement
+      redirectregex:
+        # Apply a permanent redirection (HTTP 301)
+        permanent: true
+        # The regular expression to match and capture elements from the request URL
+        regex: "^https?://(?:www\\.)?(.+)"
+        # How to modify the URL to have the new target URL
+        replacement: "https://www.${1}" # Redirect www URLs to their non-www equivalent
+    # Use with - "traefik.http.routers.Irisdegraafcom.middlewares=redirect-www-to-non-www@file"
+    redirect-www-to-non-www:
+      # Redirect a request from an url to another with regex matching and replacement
+      redirectregex:
+        # Apply a permanent redirection (HTTP 301)
+        permanent: true
+        # The regular expression to match and capture elements from the request URL
+        regex: "^https?://www\\.(.+)"
+        # How to modify the URL to have the new target URL
+        replacement: "https://${1}"
+
+    middlewares-basic-auth:
+      basicAuth:
+        users:
+          - "admin:changethis"
+        #usersFile: "/run/secrets/htpasswd" #be sure to mount the volume through docker-compose.yml
+        realm: "Traefik 2 Basic Auth"
+
+    middlewares-rate-limit:
+      rateLimit:
+        average: 100
+        burst: 50
+
+    middlewares-ipwhitelist:
+      ipWhiteList:
+        sourceRange:
+          - 172.27.0.0/12
+
+    middlewares-secure-headers:
+      headers:
+        accessControlAllowMethods:
+          - GET
+          - OPTIONS
+          - PUT
+        accessControlMaxAge: 100
+        hostsProxyHeaders:
+          - "X-Forwarded-Host"
+        # sslRedirect: true #replaced with middlewares-https-redirectscheme for v2.5.x
+        stsSeconds: 63072000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        # frameDeny: true #overwritten by customFrameOptionsValue
+        customFrameOptionsValue: SAMEORIGIN #"allow-from https:example.com" #CSP takes care of this but may be needed for organizr.
+        contentTypeNosniff: true
+        browserXssFilter: true
+        # sslForceHost: true # add sslHost to all of the services
+        # sslHost: "example.com"
+        referrerPolicy: "same-origin"
+        # Setting contentSecurityPolicy is more secure but it can break things. Proper auth will reduce the risk.
+        # the below line also breaks some apps due to 'none' - sonarr, radarr, etc.
+        # contentSecurityPolicy: "frame-ancestors '*.example.com:*';object-src 'none';script-src 'none';"
+        # Line below, featurePolicy, was deprecated in v2.5.x in favor permissionPolicy
+        # featurePolicy: "camera 'none'; geolocation 'none'; microphone 'none'; payment 'none'; usb 'none'; vr 'none';"
+        permissionsPolicy: "camera=(), microphone=(), geolocation=(), payment=(), usb=(), vr=()"
+        customResponseHeaders:
+          X-Robots-Tag: "none,noarchive,nosnippet,notranslate,noimageindex,"
+          server: ""
+          # https://community.traefik.io/t/how-to-make-websockets-work-with-traefik-2-0-setting-up-rancher/1732
+          # X-Forwarded-Proto: "https"
+
+    middlewares-compress:
+      compress:
+        excludedContentTypes:
+          - text/event-stream

@@ -1,0 +1,81 @@
+---
+global:
+  sendAnonymousUsage: false
+  #checkNewVersion: false
+
+api:
+  insecure: false
+  dashboard: true
+  #debug: true
+
+log:
+  level: "WARN"
+
+# accessLog:
+#   format: json
+
+providers:
+  docker:
+    endpoint: unix:///var/run/docker.sock
+    exposedByDefault: false
+    watch: true
+    swarmMode: false
+  file:
+    directory: /rules
+    watch: true
+
+serversTransport:
+  insecureSkipVerify: true
+
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+  websecure:
+    address: :443
+    http:
+      middlewares:
+        - middlewares-rate-limit@file
+        - middlewares-compress@file
+      tls:
+        certResolver: letsencrypt
+  dnsovertls:
+    address: :853
+  dns:
+    address: :53
+  udpdns:
+    address: :53/udp
+
+#  metrics:
+#    address: :8456
+
+# smtp:
+#   address: :25
+# smtp-ssl:
+#   address: :465
+# imap-ssl:
+#   address: :993
+
+certificatesResolvers:
+  lets-encrypt:
+    acme:
+      #caserver: https://acme-staging-v02.api.letsencrypt.org/directory #only for debug
+      email: {{emailaddress}}
+      storage: /letsencrypt/acme.json
+      tlschallenge: true
+      # httpChallenge:
+      #   entrypoint: web
+#metrics:
+#  prometheus:
+#    entryPoint: metrics
+#    addEntryPointsLabels: true
+#    addRoutersLabels: true
+#    addServicesLabels: true
+# buckets:
+#   - 0.1
+#   - 0.3
+#   - 1.2
+#   - 5.0

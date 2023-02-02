@@ -1,0 +1,84 @@
+---
+- name: Copy Docker Compose
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: /srv/docker/docker-compose.yml
+    owner: "docker"
+    group: "docker"
+    remote_src: false
+    mode: "0755"
+  tags:
+    - install-containers
+    - test
+
+- name: Copy traefik conf
+  ansible.builtin.template:
+    src: traefik.yml.j2
+    dest: /srv/docker/traefik2/traefik.yaml
+    owner: "docker"
+    group: "docker"
+    remote_src: false
+    mode: "0644"
+  tags:
+    - test
+
+- name: Copy middlewares file
+  ansible.builtin.copy:
+    src: middlewares.yml
+    dest: /srv/docker/traefik2/rules/middlewares.yml
+    owner: "docker"
+    group: "docker"
+    mode: "0644"
+
+- name: Copy blocky conf
+  ansible.builtin.template:
+    src: blocky.yml.j2
+    dest: /srv/docker/blocky/blocky.yaml
+    owner: "docker"
+    group: "docker"
+    remote_src: false
+    mode: "0644"
+  tags:
+    - test
+
+- name: Copy unbound conf
+  ansible.builtin.copy:
+    src: unbound.conf
+    dest: /srv/docker/unbound/forward-records.conf
+    owner: "docker"
+    group: "docker"
+    mode: "0644"
+  tags:
+    - test
+
+- name: Create AdGuard Home config file
+  ansible.builtin.template:
+    src: adguard-conf.yml.j2
+    dest: /srv/docker/adguard/conf/AdGuardHome.yaml
+    owner: "docker"
+    group: "docker"
+    mode: 0755
+  tags:
+    - test
+
+- name: Deploy Stack using Docker Compose
+  become: true
+  ansible.builtin.shell:
+    cmd: "docker compose -f docker-compose.yml up -d"
+    chdir: /srv/docker
+  tags:
+    - test
+
+- name: Set adguard webuser password
+  ansible.builtin.ansible.builtin.set_fact:
+    adguardwebpassword: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,punctuation') }}"
+
+- name: Generate hash for Adguard admin password
+  ansible.builtin.command: htpasswd -B -n -b {{ adguardwebuser }} {{ adguardwebpassword }}
+  register: htpasswd_generate
+
+- name: Update Admin password in AdGuardHome.yaml
+  ansible.builtin.replace:
+    path: /srv/docker/adguard/conf/AdGuardHome.yaml
+    regexp: "adguardwebpassword"
+    replace: "{{ htpasswd_generate.stdout.split(':')[1] }}"

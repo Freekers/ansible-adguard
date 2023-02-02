@@ -1,0 +1,13 @@
+---
+# groep:
+#   - naam: apps
+
+users:
+  - username: "username"
+    name: "First Lastname"
+    email: "email@email.com"
+    groups: "sudo, adm, ubuntu"
+
+# Users to remove
+remove_users:
+  - "user-old"

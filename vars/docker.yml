@@ -1,0 +1,19 @@
+---
+folders:
+  - blocky
+  - unbound
+  - adguard
+  - adguard/conf
+  - adguard/work
+  - traefik2
+  - traefik2/rules
+  - traefik2/acme
+
+adguardwebuser: "admin"
+
+# Needed for letsencrypt
+emailaddress: "makesurethisischanged@email.com"
+dockerrestartpolicy: "unless-stopped"
+
+# Fully Qualified Domain Name (FQDN) with A (and AAAA) record pointing to your server's IP
+hostname: "url.com"

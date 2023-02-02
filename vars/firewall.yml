@@ -1,0 +1,32 @@
+---
+firewall_additional_rules:
+  - "iptables -A INPUT -p tcp --dport 22 -s 11.22.33.44 -j ACCEPT" # insert your ip here
+firewall_allowed_tcp_ports:
+  # - "22" # enable this if you are testing with vagrant!
+  - "80"
+  - "443"
+  - "853:853"
+  - "53:53"
+
+firewall_allowed_udp_ports:
+  - "53:53"
+
+firewall_enable_ipv6: false
+# Set to true to ensure other firewall management software is disabled.
+# firewall_disable_firewalld: true
+# firewall_disable_ufw: true
+# Rest is uncommented and will be handedeld by the role.
+# firewall_state: started
+# firewall_enabled_at_boot: true
+
+# firewall_flush_rules_and_chains: true
+
+# firewall_allowed_udp_ports: []
+# firewall_forwarded_tcp_ports:
+#   - { src: "22", dest: "2222" }
+#   - { src: "80", dest: "8080" }
+# firewall_forwarded_udp_ports: []
+# Allow only the IP 167.89.89.18 to access port 22 (ssh).
+# firewall_ip6_additional_rules: []
+# firewall_log_dropped_packets: true
+

@@ -1,0 +1,28 @@
+- name: Configure server
+  hosts: "all"
+  gather_facts: true
+  become: true
+  vars_files:
+    - vars/clamav.yml
+    - vars/docker.yml
+    - vars/firewall.yml # all is done via iptables
+    - vars/ntp.yml
+    - vars/packages.yml
+    - vars/security.yml
+    - vars/selinux.yml
+    - vars/user-management.yml
+    - vars/zsh-antigen.yml
+
+  roles:
+    - { role: geerlingguy.firewall, when: ansible_os_family == 'RedHat' }
+    - geerlingguy.ntp
+    - geerlingguy.clamav
+    - { role: geerlingguy.firewall, tags: firewall }
+    - geerlingguy.security
+    - geerlingguy.pip
+    - robertdebock.selinux
+    - packages
+    - user-management
+    - bruvv.zsh_antigen
+    - docker
+    - cleanup

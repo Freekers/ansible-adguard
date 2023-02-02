@@ -1,0 +1,6 @@
+---
+# zsh_user: "{{ ansible_user }}"
+
+# useful for deploy many zsh users at host, without duplicate and without write access
+zsh_shared: no
+zsh_source_for_all_users: yes

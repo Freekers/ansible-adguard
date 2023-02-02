@@ -1,0 +1,158 @@
+version: "3"
+
+networks:
+  traefik_proxy:
+    name: traefik_proxy
+  backend:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/24
+         gateway: 10.5.0.1
+         ip_range: 10.5.0.5/30
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: {{dockerrestartpolicy}}
+    networks:
+      - traefik_proxy
+    ports:
+      - "80:80" # web
+      - "443:443" # websecure
+      - "853:853"
+      - "53:53"
+      - "53:53/udp"
+      #- "8456:8456" # metrics port
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/srv/docker/traefik2/rules:/rules"
+      - "/srv/docker/traefik2/acme:/letsencrypt"
+      - "/srv/docker/traefik2/traefik.yaml:/etc/traefik/traefik.yaml"
+    environment:
+      - TZ={{ntp_timezone}}
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik_proxy
+      - traefik.http.routers.traefikdashboard.rule=Host(`blocky.traefik.{{hostname}}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
+      - traefik.http.routers.traefikdashboard.entrypoints=websecure
+      - traefik.http.routers.traefikdashboard.service=api@internal
+      - traefik.http.routers.traefikdashboard.tls=true
+      - traefik.http.routers.traefikdashboard.tls.certresolver=lets-encrypt
+      - traefik.http.routers.traefikdashboard.middlewares=middlewares-ipwhitelist@file, redirect-web-to-websecure@internal, middlewares-rate-limit@file, middlewares-compress@file
+
+  adguard:
+    image: adguard/adguardhome:latest
+    container_name: adguard
+    restart: {{dockerrestartpolicy}}
+    networks:
+      - traefik_proxy
+      - backend
+    environment:
+      - TZ={{ntp_timezone}}
+    volumes:
+      - /srv/docker/adguard/conf:/opt/adguardhome/conf
+      - /srv/docker/adguard/work:/opt/adguardhome/work
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_proxy"
+
+      # web interface
+      - traefik.http.routers.adfree.rule=Host(`adfree.{{hostname}}`)
+      - traefik.http.routers.adfree.entrypoints=websecure
+      - traefik.http.routers.adfree.tls.certresolver=lets-encrypt
+      - traefik.http.services.adfree.loadbalancer.server.port=80
+
+      # DNS-over-TLS
+      - "traefik.tcp.routers.dnsovertls.rule=HostSNI(`adfree.{{hostname}}`)"
+      - "traefik.tcp.routers.dnsovertls.entrypoints=dnsovertls"
+      - "traefik.tcp.routers.dnsovertls.tls=true"
+      - "traefik.tcp.routers.dnsovertls.tls.certresolver=lets-encrypt"
+      - "traefik.tcp.routers.dnsovertls.service=adfree"
+
+      # Normal DNS coming in on 53 TCP, no TLS
+      - "traefik.tcp.routers.dns.rule=HostSNI(`adfree.{{hostname}}`)"
+      - "traefik.tcp.routers.dns.entrypoints=dns"
+      - "traefik.tcp.routers.dns.tls=false"
+      - "traefik.tcp.routers.dns.service=adfree"
+
+      # recieves traffic from both the TLS and non-TLS traefik routers
+      - "traefik.tcp.services.adfree.loadbalancer.server.port=53"
+
+      # Normal DNS coming in on 53 UDP
+      - "traefik.udp.routers.udpdns.entrypoints=udpdns"
+      - "traefik.udp.routers.udpdns.service=adfree"
+      - "traefik.udp.services.adfree.loadbalancer.server.port=53"
+
+  # blocky:
+  #   image: spx01/blocky
+  #   container_name: blocky
+  #   restart: {{dockerrestartpolicy}}
+  #   networks:
+  #     - traefik_proxy
+  #     - backend
+  #   environment:
+  #     - TZ={{ntp_timezone}}
+  #   volumes:
+  #     - /srv/docker/blocky/blocky.yaml:/app/config.yml
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.docker.network=traefik_proxy"
+
+  #     # web interface
+  #     # - traefik.http.routers.blocky.rule=Host(`blocky.{{hostname}}`)
+  #     # - traefik.http.routers.blocky.entrypoints=websecure
+  #     # - traefik.http.routers.blocky.tls.certresolver=lets-encrypt
+  #     # - traefik.http.services.blocky.loadbalancer.server.port=80
+
+  #     # DNS-over-TLS
+  #     - "traefik.tcp.routers.dnsovertls.rule=HostSNI(`blocky.{{hostname}}`)"
+  #     - "traefik.tcp.routers.dnsovertls.entrypoints=dnsovertls"
+  #     - "traefik.tcp.routers.dnsovertls.tls=true"
+  #     - "traefik.tcp.routers.dnsovertls.tls.certresolver=lets-encrypt"
+  #     - "traefik.tcp.routers.dnsovertls.service=blocky"
+
+  #     # Normal DNS coming in on 53 TCP, no TLS
+  #     - "traefik.tcp.routers.dns.rule=HostSNI(`blocky.{{hostname}}`)"
+  #     - "traefik.tcp.routers.dns.entrypoints=dns"
+  #     - "traefik.tcp.routers.dns.tls=false"
+  #     - "traefik.tcp.routers.dns.service=blocky"
+
+  #     # recieves traffic from both the TLS and non-TLS traefik routers
+  #     - "traefik.tcp.services.blocky.loadbalancer.server.port=53"
+
+  #     # Normal DNS coming in on 53 UDP
+  #     - "traefik.udp.routers.udpdns.entrypoints=udpdns"
+  #     - "traefik.udp.routers.udpdns.service=blocky"
+  #     - "traefik.udp.services.blocky.loadbalancer.server.port=53"
+
+  unbound:
+    image: crazymax/unbound
+    container_name: unbound
+    restart: {{dockerrestartpolicy}}
+    networks:
+      backend:
+        ipv4_address: 10.5.0.6
+    ports:
+      - "5053:5053/tcp"
+      - "5053:5053/udp"
+    volumes:
+      - "/srv/docker/unbound/forward-records.conf:/config/forward-records.conf:ro"
+
+  watchtower:
+    container_name: watchtower
+    restart: {{dockerrestartpolicy}}
+    network_mode: bridge
+    image: containrrr/watchtower:latest
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_REMOVE_VOLUMES=true
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - TZ={{ntp_timezone}}
+      - WATCHTOWER_DEBUG=false
+      - WATCHTOWER_RUN_ONCE=false
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - traefik.enable=false

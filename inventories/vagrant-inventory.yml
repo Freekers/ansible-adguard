@@ -1,0 +1,11 @@
+---
+all:
+  hosts:
+    test_server:
+      ansible_connection: "ssh"
+      vagrant_box: true
+      ansible_ssh_pipelining: true
+      ansible_user: "vagrant"
+      ansible_host: "172.23.18.20"
+      computer_hostname: "test_server"
+      ansible_ssh_private_key_file: tests/vagrant-keys/vagrant_key

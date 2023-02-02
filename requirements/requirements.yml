@@ -1,0 +1,11 @@
+---
+roles:
+  - name: "geerlingguy.repo-epel"
+  - name: "geerlingguy.ntp"
+  - name: "geerlingguy.clamav"
+  - name: "geerlingguy.firewall"
+  - name: "geerlingguy.security"
+  - name: "geerlingguy.docker"
+  - name: "robertdebock.selinux"
+  - name: "geerlingguy.pip"
+  - name: "bruvv.zsh_antigen"

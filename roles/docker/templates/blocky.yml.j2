@@ -1,0 +1,75 @@
+upstream:
+  default:
+    - 10.5.0.6:5053
+  #  - tcp-tls:dns.quad9.net:853
+  #   - tcp-tls:dns.adguard.com:853
+  #   - tcp-tls:cloudflare-dns.com:853
+
+blocking:
+  blackLists:
+    ads:
+      - https://dbl.oisd.nl/
+      - https://www.bentasker.co.uk/adblock/blockeddomains.txt
+      - https://raw.githubusercontent.com/hectorm/hmirror/master/data/phishing.army-extended/list.txt
+      - https://raw.githubusercontent.com/hectorm/hmirror/master/data/easylist/list.txt
+      - https://someonewhocares.org/hosts/zero/hosts
+      - https://raw.githubusercontent.com/mmotti/adguard-home-filters/master/regex.txt
+      - https://pgl.yoyo.org/as/serverlist.php?hostformat=adblock&showintro=0&mimetype=plaintext
+      - https://raw.githubusercontent.com/durablenapkin/scamblocklist/master/hosts.txt
+      - https://raw.githubusercontent.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites/master/hacked-domains.list
+      - https://adaway.org/hosts.txt
+      - https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt
+      - https://raw.githubusercontent.com/bruvv/whitelist/master/domains/blocklist.txt
+      - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+      - https://raw.githubusercontent.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites/master/hosts
+      - https://raw.githubusercontent.com/AdguardTeam/cname-trackers/master/combined_disguised_trackers_justdomains.txt
+  whiteLists:
+    ads:
+      - https://raw.githubusercontent.com/bruvv/whitelist/master/domains/whitelist.txt
+      - https://raw.githubusercontent.com/bruvv/whitelist/master/domains/ref_whitelist.txt
+  blockType: zeroIp
+prometheus:
+  enable: false
+port: 53
+tlsPort: 853
+httpPort: 80
+httpsPort: 443
+
+# optional: configuration for caching of DNS responses
+caching:
+  # duration how long a response must be cached (min value).
+  # If <=0, use response's TTL, if >0 use this value, if TTL is smaller
+  # Default: 0
+  minTime: 5m
+  # duration how long a response must be cached (max value).
+  # If <0, do not cache responses
+  # If 0, use TTL
+  # If > 0, use this value, if TTL is greater
+  # Default: 0
+  maxTime: 30m
+  # Max number of cache entries (responses) to be kept in cache (soft limit). Useful on systems with limited amount of RAM.
+  # Default (0): unlimited
+  maxItemsCount: 0
+  # if true, will preload DNS results for often used queries (default: names queried more than 5 times in a 2-hour time window)
+  # this improves the response time for often used queries, but significantly increases external traffic
+  # default: false
+  prefetching: true
+  # prefetch track time window (in duration format)
+  # default: 120
+  prefetchExpires: 2h
+  # name queries threshold for prefetch
+  # default: 5
+  prefetchThreshold: 5
+  # Max number of domains to be kept in cache for prefetching (soft limit). Useful on systems with limited amount of RAM.
+  # Default (0): unlimited
+  prefetchMaxItemsCount: 0
+  # Time how long negative results (NXDOMAIN response or empty result) are cached. A value of -1 will disable caching for negative results.
+  # Default: 30m
+  cacheTimeNegative: 30m
+
+filtering:
+  # optional: drop all queries with following query types. Default: empty
+  queryTypes:
+    - AAAA
+
+bootstrapDns: tcp+udp:1.1.1.1

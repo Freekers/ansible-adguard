@@ -1,0 +1,403 @@
+bind_host: 0.0.0.0
+bind_port: 80
+beta_bind_port: 0
+users:
+  - name: {{ adguardwebuser }}
+    password: {{ adguardwebpassword }}
+auth_attempts: 5
+block_auth_min: 15
+http_proxy: ""
+language: ""
+debug_pprof: false
+web_session_ttl: 720
+dns:
+  bind_hosts:
+    - 0.0.0.0
+  port: 53
+  statistics_interval: 90
+  querylog_enabled: true
+  querylog_file_enabled: true
+  querylog_interval: 2160h
+  querylog_size_memory: 1000
+  anonymize_client_ip: false
+  protection_enabled: true
+  blocking_mode: default
+  blocking_ipv4: ""
+  blocking_ipv6: ""
+  blocked_response_ttl: 10
+  parental_block_host: family-block.dns.adguard.com
+  safebrowsing_block_host: standard-block.dns.adguard.com
+  ratelimit: 20
+  ratelimit_whitelist: []
+  refuse_any: true
+  upstream_dns:
+    - udp://10.5.0.6:5053
+  upstream_dns_file: ""
+  bootstrap_dns:
+    - 9.9.9.10
+    - 149.112.112.10
+    - 2620:fe::10
+    - 2620:fe::fe:10
+  all_servers: false
+  fastest_addr: false
+  fastest_timeout: 1s
+  allowed_clients: []
+  disallowed_clients:
+    - 2.58.12.1/24
+    - 162.142.125.1/24
+    - 88.80.186.137
+    - 5.180.1.1/16
+    - 5.183.1.1/16
+    - 5.188.1.1/16
+    - 18.231.91.2
+    - 18.232.89.0
+    - 23.254.36.34
+    - 24.125.204.172
+    - 24.147.80.152
+    - 37.120.218.106
+    - 39.34.154.57
+    - 39.96.140.104
+    - 39.104.19.202
+    - 39.105.100.118
+    - 39.105.229.105
+    - 42.186.112.67
+    - 45.10.232.141/24
+    - 45.45.45.45
+    - 45.56.1.1/16
+    - 45.57.247.23
+    - 45.61.142.184
+    - 45.83.64.0
+    - 45.135.232.1/24
+    - 45.143.200.1/24
+    - 45.146.0.1/16
+    - 45.155.205.1/24
+    - 45.227.253.116
+    - 46.243.140.1/24
+    - 47.243.101.175
+    - 47.251.34.0
+    - 47.252.2.6
+    - 47.252.86.224
+    - 47.254.170.110
+    - 51.210.48.107
+    - 52.73.169.0
+    - 64.145.1.1/16
+    - 66.240.236.0
+    - 67.240.44.5
+    - 68.81.175.223
+    - 68.110.78.59
+    - 69.16.157.1/24
+    - 71.6.146.0
+    - 71.6.232.0
+    - 73.41.219.138
+    - 74.82.47.0
+    - 75.23.191.246
+    - 75.84.182.230
+    - 75.133.159.190
+    - 76.120.140.172
+    - 77.243.191.120
+    - 78.128.1.1/16
+    - 79.124.62.1/24
+    - 79.125.49.190
+    - 80.25.158.172
+    - 80.82.65.1/24
+    - 80.194.235.101
+    - 81.103.10.134
+    - 81.225.158.24
+    - 83.143.246.0
+    - 84.247.50.1/24
+    - 88.125.172.77
+    - 89.39.107.167
+    - 89.40.182.0
+    - 89.248.165.1/24
+    - 90.24.76.240
+    - 91.132.58.1/24
+    - 91.191.209.1/24
+    - 91.216.110.0
+    - 92.63.197.0/24
+    - 92.118.161.0
+    - 94.156.174.45
+    - 98.156.167.222
+    - 102.39.253.30
+    - 103.107.197.46
+    - 103.125.235.22
+    - 103.145.13.0/24
+    - 104.55.51.212
+    - 104.159.183.76
+    - 104.169.74.143
+    - 104.238.39.219
+    - 104.238.44.46
+    - 109.238.11.14
+    - 111.200.195.67
+    - 116.90.74.204
+    - 120.232.176.0
+    - 122.228.19.0
+    - 123.206.235.0
+    - 129.250.206.0
+    - 129.250.206.86
+    - 131.159.24.242
+    - 131.196.101.14
+    - 138.122.233.1/16
+    - 138.186.78.18
+    - 139.162.250.203
+    - 141.212.123.0
+    - 143.202.163.78
+    - 143.202.163.80
+    - 144.217.207.0
+    - 146.88.240.1/24
+    - 147.135.104.186
+    - 147.203.238.0
+    - 154.17.5.0
+    - 162.194.141.97
+    - 162.248.93.178
+    - 164.52.24.0
+    - 167.94.138.1/24
+    - 167.248.133.1/24
+    - 168.228.197.144
+    - 169.45.119.36
+    - 169.55.119.4
+    - 172.58.83.4
+    - 172.83.45.212
+    - 172.104.217.92
+    - 172.111.1.1/16
+    - 173.195.15.243
+    - 173.208.169.130
+    - 173.245.1.1/16
+    - 174.90.223.150
+    - 176.9.38.88
+    - 176.58.103.0
+    - 176.67.1.1/16
+    - 183.230.113.51
+    - 185.108.107.1/16
+    - 185.143.223.22
+    - 185.147.212.1/16
+    - 185.191.34.0/24
+    - 187.147.93.46
+    - 187.150.6.144
+    - 187.190.1.1/16
+    - 187.251.136.8
+    - 189.61.175.236
+    - 189.176.42.74
+    - 192.35.168.0
+    - 192.87.173.56
+    - 192.182.160.249
+    - 192.200.158.1/16
+    - 192.241.214.1/24
+    - 192.241.220.0
+    - 193.27.228.1/24
+    - 193.29.15.0
+    - 193.57.124.83
+    - 193.163.125.1/24
+    - 193.169.252.0
+    - 193.242.145.1/24
+    - 194.61.1.1/16
+    - 195.37.190.0
+    - 195.54.160.1/24
+    - 196.52.43.0
+    - 198.23.119.36
+    - 198.74.56.29
+    - 198.181.163.31
+    - 202.73.14.54
+    - 202.73.14.58
+    - 202.112.238.55
+    - 202.112.238.56
+    - 205.185.1.1/16
+    - 209.58.142.157
+    - 209.107.1.1/16
+    - 213.127.30.63
+    - 216.131.1.1/16
+    - 216.151.1.1/16
+    - 218.75.38.0
+    - 220.180.241.26
+    - 223.71.167.0
+  blocked_hosts:
+    - version.bind
+    - id.server
+    - hostname.bind
+    - pizzaseo.com
+  trusted_proxies:
+    - 127.0.0.0/8
+    - 172.0.0.0/8
+    - 10.0.0.0/8
+    - ::1/128
+  cache_size: 4294967295
+  cache_ttl_min: 3600
+  cache_ttl_max: 172800
+  cache_optimistic: true
+  bogus_nxdomain: []
+  aaaa_disabled: true
+  enable_dnssec: true
+  edns_client_subnet: true
+  max_goroutines: 300
+  handle_ddr: true
+  ipset: []
+  ipset_file: ""
+  filtering_enabled: true
+  filters_update_interval: 12
+  parental_enabled: false
+  safesearch_enabled: false
+  safebrowsing_enabled: true
+  safebrowsing_cache_size: 1048576
+  safesearch_cache_size: 1048576
+  parental_cache_size: 1048576
+  cache_time: 30
+  rewrites: []
+  blocked_services: []
+  upstream_timeout: 10s
+  private_networks: []
+  use_private_ptr_resolvers: true
+  local_ptr_upstreams: []
+  serve_http3: false
+  use_http3_upstreams: false
+tls:
+  enabled: true
+  server_name: adfree.{{ hostname }}
+  force_https: false
+  port_https: 443
+  port_dns_over_tls: 853
+  port_dns_over_quic: 784
+  port_dnscrypt: 0
+  dnscrypt_config_file: ""
+  allow_unencrypted_doh: true # this setting is important, since we are using a reverse proxy to access DoH
+  strict_sni_check: false
+  certificate_chain: ""
+  private_key: ""
+  certificate_path: ""
+  private_key_path: ""
+filters:
+  - enabled: true
+    url: https://abp.oisd.nl/
+    name: OISD
+    id: 1589486914
+  - enabled: false
+    url: https://raw.githubusercontent.com/ookangzheng/dbl-oisd-nl/master/abp.txt
+    name: OISD Mirror
+    id: 1589486915
+  - enabled: true
+    url: https://www.bentasker.co.uk/adblock/blockeddomains.txt
+    name: ben
+    id: 1592489957
+  - enabled: true
+    url: https://raw.githubusercontent.com/hectorm/hmirror/master/data/phishing.army-extended/list.txt
+    name: phishing
+    id: 1592489962
+  - enabled: true
+    url: https://raw.githubusercontent.com/hectorm/hmirror/master/data/easylist/list.txt
+    name: easylist
+    id: 1592489973
+  - enabled: false
+    url: https://raw.githubusercontent.com/mmotti/adguard-home-filters/master/regex.txt
+    name: MMotti AdguardHome - regex.txt
+    id: 1594131050
+  - enabled: true
+    url: https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
+    name: AdGuard DNS filter
+    id: 1600878098
+  - enabled: true
+    url: https://someonewhocares.org/hosts/zero/hosts
+    name: Dan Pollock's List
+    id: 1600878099
+  - enabled: true
+    url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/GameConsoleAdblockList.txt
+    name: Game Console Adblock List
+    id: 1600878100
+  - enabled: true
+    url: https://raw.githubusercontent.com/Perflyst/PiHoleBlocklist/master/SmartTV-AGH.txt
+    name: Perflyst and Dandelion Sprout's Smart-TV Blocklist
+    id: 1600878101
+  - enabled: true
+    url: https://pgl.yoyo.org/adservers/serverlist.php?hostformat=adblockplus&showintro=1&mimetype=plaintext
+    name: Peter Lowe's List
+    id: 1600878103
+  - enabled: true
+    url: https://raw.githubusercontent.com/durablenapkin/scamblocklist/master/adguard.txt
+    name: Scam Blocklist by DurableNapkin
+    id: 1600878106
+  - enabled: true
+    url: https://raw.githubusercontent.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites/master/hacked-domains.list
+    name: The Big List of Hacked Malware Web Sites
+    id: 1600878108
+  - enabled: true
+    url: https://adaway.org/hosts.txt
+    name: AdAway Default Blocklist
+    id: 1603943059
+  - enabled: true
+    url: https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/hosts.txt
+    name: NoCoin Filter List
+    id: 1603943060
+  - enabled: true
+    url: https://raw.githubusercontent.com/bruvv/whitelist/master/domains/blocklist.txt
+    name: Bruvv blocklist
+    id: 1606817416
+  - enabled: true
+    url: https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
+    name: WindowsSpyBlocker - Hosts spy rules
+    id: 1613015134
+  - enabled: true
+    url: https://raw.githubusercontent.com/mitchellkrogza/The-Big-List-of-Hacked-Malware-Web-Sites/master/hosts
+    name: The Big List of Hacked Malware Web Sites
+    id: 1613015135
+  - enabled: true
+    url: https://raw.githubusercontent.com/AdguardTeam/cname-trackers/master/combined_disguised_trackers_justdomains.txt
+    name: Cname
+    id: 1613447096
+  - enabled: true
+    url: https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareAdGuardHome.txt
+    name: Dandelion Sprout's Anti-Malware List
+    id: 1666304968
+  - enabled: true
+    url: https://malware-filter.gitlab.io/malware-filter/urlhaus-filter-agh-online.txt
+    name: Online Malicious URL Blocklist
+    id: 1666304969
+whitelist_filters:
+  - enabled: false
+    url: https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt
+    name: referral
+    id: 1594131048
+  - enabled: true
+    url: https://raw.githubusercontent.com/bruvv/whitelist/master/domains/whitelist.txt
+    name: bruvv whitelist
+    id: 1594131049
+  - enabled: true
+    url: https://raw.githubusercontent.com/bruvv/whitelist/master/domains/ref_whitelist.txt
+    name: Bruvv ref_whitelist
+    id: 1632001876
+user_rules:
+  - /^[a-z]{15}\.(ru|su|cn)$/
+  - '@@||local^$important'
+dhcp:
+  enabled: false
+  interface_name: ""
+  local_domain_name: lan
+  dhcpv4:
+    gateway_ip: ""
+    subnet_mask: ""
+    range_start: ""
+    range_end: ""
+    lease_duration: 86400
+    icmp_timeout_msec: 1000
+    options: []
+  dhcpv6:
+    range_start: ""
+    lease_duration: 86400
+    ra_slaac_only: false
+    ra_allow_slaac: false
+clients:
+  runtime_sources:
+    whois: true
+    arp: true
+    rdns: true
+    dhcp: true
+    hosts: false
+  persistent: []
+log_file: ""
+log_max_backups: 0
+log_max_size: 100
+log_max_age: 3
+log_compress: false
+log_localtime: false
+verbose: false
+os:
+  group: ""
+  user: ""
+  rlimit_nofile: 0
+schema_version: 14
