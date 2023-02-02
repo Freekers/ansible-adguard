@@ -21,8 +21,8 @@
     - geerlingguy.security
     - geerlingguy.pip
     - robertdebock.selinux
-    - packages
+    - { role: packages, tags: adguard }
     - user-management
     - bruvv.zsh_antigen
-    - docker
-    - cleanup
+    - { role: docker, tags: adguard }
+    - { role: cleanup, tags: adguard }
