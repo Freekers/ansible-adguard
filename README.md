@@ -39,14 +39,14 @@ If all you're looking for is an adblocking DNS service, please consider using [A
 
 1. Install Ansible using `sudo apt-add-repository -y ppa:ansible/ansible && sudo apt install ansible` on the machine that will initiate the playbook. Or run [THIS] (https://github.com/bruvv/terraform-oracle-cloud-free-adguard) Terraform script to automaticilly create a free linux ARM server with Oracle Cloud)
 
-2. Clone repository using `git clone https://github.com/bruvv/ansible-adguard-unbound.git`
+2. Clone repository using `git clone https://github.com/Freekers/ansible-adguard.git`
 
 3. Install requirements `ansible-galaxy install -r requirements/requirements.yml`
 
 4. Change all the needed stuff in `vars` folder. But in specific: `docker.yml` & `firewall.yml` & `user-management.yml`
 
 5. Start playbook using `ansible-playbook --connection=local --inventory 127.0.0.1, ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com"`
-   5.1 or if you want just to install adguard use: `ansible-playbook ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com" -t adguard`
+   5.1 or if you want just to install adguard and not configure a whole server: `ansible-playbook ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com" -t adguard`
 
 6. After installation, it can take up to 5 minutes before your AdGuard Home instance will be accessible. This is due to ZeroSSL's certificate creation process. AdGuard Home will _not_ start before a valid SSL certificate has been generated, so please be patient! For more information, please refer to the 'Usage Instructions' section below.
 
@@ -87,4 +87,4 @@ If needed, for manual configuration of Watchtower, [please refer to their offici
 
 ## License
 
-Unless otherwise specified, all code in this repository is released under the GNU Affero General Public License v3.0. See the [repository's `LICENSE` file](https://github.com/bruvv/ansible-adguard-unbound/blob/main/LICENSE) for details.
+Unless otherwise specified, all code in this repository is released under the GNU Affero General Public License v3.0. See the [repository's `LICENSE` file](https://github.com/Freekers/ansible-adguard/blob/main/LICENSE) for details.
