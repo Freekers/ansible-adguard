@@ -37,15 +37,16 @@ If all you're looking for is an adblocking DNS service, please consider using [A
 
 ## Installation Instructions
 
-1. Install Ansible using `sudo apt-add-repository -y ppa:ansible/ansible && sudo apt install ansible` on the machine that will initiate the playbook. Or run [THIS] (https://github.com/bruvv/terraform-oracle-cloud-free-adguard) Terraform script to automaticilly create a free linux ARM server with Oracle Cloud)
+1. Install Ansible, for example: `sudo apt-add-repository -y ppa:ansible/ansible && sudo apt install ansible` on the machine that will initiate the playbook. Or run [THIS](https://github.com/bruvv/terraform-oracle-cloud-free-adguard) Terraform script to automaticilly create a free linux ARM server with Oracle Cloud)
 
 2. Clone repository using `git clone https://github.com/Freekers/ansible-adguard.git`
 
 3. Install requirements `ansible-galaxy install -r requirements/requirements.yml`
 
 4. Change all the needed stuff in `vars` folder. But in specific: `docker.yml` & `firewall.yml` & `user-management.yml`
+   4.1 if you want to configure an external server edit: `inventories/inventory.yml` with the server ip you want to configure.
 
-5. If you want to configure a complete server: `ansible-playbook ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com"`
+5. If you want to configure a complete server: `ansible-playbook ansible-playbook.yml -i inventory/inventory.yml -e "hostname=adguard.website.com emailaddress=here@email.com"`
    5.1 or if you want just to install adguard and not configure a whole server: `ansible-playbook ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com" -t adguard`
    5.2 If you want to run this on your local computer use: `ansible-playbook --connection=local --inventory 127.0.0.1, ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com"`
 
