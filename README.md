@@ -45,8 +45,9 @@ If all you're looking for is an adblocking DNS service, please consider using [A
 
 4. Change all the needed stuff in `vars` folder. But in specific: `docker.yml` & `firewall.yml` & `user-management.yml`
 
-5. Start playbook using `ansible-playbook --connection=local --inventory 127.0.0.1, ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com"`
+5. If you want to configure a complete server: `ansible-playbook ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com"`
    5.1 or if you want just to install adguard and not configure a whole server: `ansible-playbook ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com" -t adguard`
+   5.2 If you want to run this on your local computer use: `ansible-playbook --connection=local --inventory 127.0.0.1, ansible-playbook.yml -e "hostname=adguard.website.com emailaddress=here@email.com"`
 
 6. After installation, it can take up to 5 minutes before your AdGuard Home instance will be accessible. This is due to ZeroSSL's certificate creation process. AdGuard Home will _not_ start before a valid SSL certificate has been generated, so please be patient! For more information, please refer to the 'Usage Instructions' section below.
 
