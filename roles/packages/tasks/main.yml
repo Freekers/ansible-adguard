@@ -1,0 +1,21 @@
+---
+- name: Update and upgrade apt packages on Debian
+  ansible.builtin.apt:
+    upgrade: full
+    update_cache: true
+  when:
+    - ansible_os_family == 'Debian'
+
+- name: Upgrade all packages on RedHat
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_cache: true
+  when:
+    - ansible_os_family == 'RedHat'
+
+- name: Install packages
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ packages }}"
