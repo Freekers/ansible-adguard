@@ -73,6 +73,7 @@ services:
       - "traefik.tcp.services.adguard-tcp.loadbalancer.server.port=53"
 
       # Normal DNS coming in on 53 TCP, no TLS
+      - "traefik.tcp.routers.dns.rule=HostSNI(`*`)"
       - "traefik.tcp.routers.dns.entrypoints=dns"
       - "traefik.tcp.routers.dns.service=adguard-tcp"
 
