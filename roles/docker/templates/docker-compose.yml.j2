@@ -33,14 +33,14 @@ services:
     environment:
       - TZ={{ntp_timezone}}
     labels:
-      - traefik.enable=true
-      - traefik.docker.network=traefik_proxy
-      - traefik.http.routers.traefikdashboard.rule=Host(`blocky.traefik.{{hostname}}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))
-      - traefik.http.routers.traefikdashboard.entrypoints=websecure
-      - traefik.http.routers.traefikdashboard.service=api@internal
-      - traefik.http.routers.traefikdashboard.tls=true
-      - traefik.http.routers.traefikdashboard.tls.certresolver=lets-encrypt
-      - traefik.http.routers.traefikdashboard.middlewares=middlewares-ipwhitelist@file, redirect-web-to-websecure@internal, middlewares-rate-limit@file, middlewares-compress@file
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik_proxy"
+      - "traefik.http.routers.traefikdashboard.rule=Host(`blocky.traefik.{{hostname}}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.traefikdashboard.entrypoints=websecure"
+      - "traefik.http.routers.traefikdashboard.service=api@internal"
+      - "traefik.http.routers.traefikdashboard.tls=true"
+      - "traefik.http.routers.traefikdashboard.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.traefikdashboard.middlewares=middlewares-ipwhitelist@file, redirect-web-to-websecure@internal, middlewares-rate-limit@file"
 
   adguard:
     image: adguard/adguardhome:latest
@@ -59,31 +59,27 @@ services:
       - "traefik.docker.network=traefik_proxy"
 
       # web interface
-      - traefik.http.routers.adfree.rule=Host(`adfree.{{hostname}}`)
-      - traefik.http.routers.adfree.entrypoints=websecure
-      - traefik.http.routers.adfree.tls.certresolver=lets-encrypt
-      - traefik.http.services.adfree.loadbalancer.server.port=80
+      - "traefik.http.routers.adfree-gui.rule=Host(`adfree.{{hostname}}`)"
+      - "traefik.http.routers.adfree-gui.entrypoints=websecure"
+      - "traefik.http.routers.adfree-gui.tls.certresolver=lets-encrypt"
+      - "traefik.http.services.adfree-gui.loadbalancer.server.port=80"
 
       # DNS-over-TLS
       - "traefik.tcp.routers.dnsovertls.rule=HostSNI(`adfree.{{hostname}}`)"
       - "traefik.tcp.routers.dnsovertls.entrypoints=dnsovertls"
       - "traefik.tcp.routers.dnsovertls.tls=true"
       - "traefik.tcp.routers.dnsovertls.tls.certresolver=lets-encrypt"
-      - "traefik.tcp.routers.dnsovertls.service=adfree"
+      - "traefik.tcp.routers.dnsovertls.service=adguard-tcp"
+      - "traefik.tcp.services.adguard-tcp.loadbalancer.server.port=53"
 
       # Normal DNS coming in on 53 TCP, no TLS
-      - "traefik.tcp.routers.dns.rule=HostSNI(`adfree.{{hostname}}`)"
       - "traefik.tcp.routers.dns.entrypoints=dns"
-      - "traefik.tcp.routers.dns.tls=false"
-      - "traefik.tcp.routers.dns.service=adfree"
-
-      # recieves traffic from both the TLS and non-TLS traefik routers
-      - "traefik.tcp.services.adfree.loadbalancer.server.port=53"
+      - "traefik.tcp.routers.dns.service=adguard-tcp"
 
       # Normal DNS coming in on 53 UDP
       - "traefik.udp.routers.udpdns.entrypoints=udpdns"
-      - "traefik.udp.routers.udpdns.service=adfree"
-      - "traefik.udp.services.adfree.loadbalancer.server.port=53"
+      - "traefik.udp.routers.udpdns.service=adguard-udp"
+      - "traefik.udp.services.adguard-udp.loadbalancer.server.port=53"
 
   # blocky:
   #   image: spx01/blocky

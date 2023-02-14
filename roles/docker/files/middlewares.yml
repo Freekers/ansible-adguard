@@ -74,5 +74,3 @@ http:
 
     middlewares-compress:
       compress:
-        excludedContentTypes:
-          - text/event-stream
