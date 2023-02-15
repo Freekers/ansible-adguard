@@ -26,14 +26,14 @@ If all you're looking for is an adblocking DNS service, please consider using [A
 - 80 (TCP) for ZeroSSL's validation method
 - 443 (TCP) for AdGuard Home's webinterface & DoH
 - 853 (TCP) for DoT
-- 5443 (UDP/TCP) for DNSCrypt
-- 784 (UDP) for DNS over QUIC
 
 2. You _must_ own a Fully Qualified Domain Name (FQDN), such as yourdomain.com.  
-   This is required to generate a valid ZeroSSL SSL Certificate used for DoH & DoT.
+   This is required to generate a valid SSL Certificate used for DoH & DoT.
 
 3. You _must_ setup an A (and AAAA record if IPv6 DNS resolution is desired) for your domain, pointing to the IP address of your Linux server.  
-   This is required to generate a valid ZeroSSL SSL Certificate and used for DoH & DoT.
+   This is required to generate a valid ZeroSSL SSL Certificate and used for DoH & DoT.\
+
+4. You _must_ create 2 cnames: `traefik`, `adguard` and `portainer` this is needed for traefik as a reverse proxy provider. So you will connect to: `adguard.example.com` but you can also use `traefik.example.com` and `portainer.example.com`.
 
 ## Installation Instructions
 

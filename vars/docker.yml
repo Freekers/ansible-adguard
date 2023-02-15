@@ -8,6 +8,7 @@ folders:
   - traefik2
   - traefik2/rules
   - traefik2/acme
+  - portainer
 
 adguardwebuser: "admin"
 adguardwebpassword: "P@$$w0rd"

@@ -35,7 +35,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=traefik_proxy"
-      - "traefik.http.routers.traefikdashboard.rule=Host(`blocky.traefik.{{hostname}}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.traefikdashboard.rule=Host(`traefik.{{hostname}}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       - "traefik.http.routers.traefikdashboard.entrypoints=websecure"
       - "traefik.http.routers.traefikdashboard.service=api@internal"
       - "traefik.http.routers.traefikdashboard.tls=true"
@@ -59,13 +59,13 @@ services:
       - "traefik.docker.network=traefik_proxy"
 
       # web interface
-      - "traefik.http.routers.adfree-gui.rule=Host(`adfree.{{hostname}}`)"
+      - "traefik.http.routers.adfree-gui.rule=Host(`adguard.{{hostname}}`)"
       - "traefik.http.routers.adfree-gui.entrypoints=websecure"
       - "traefik.http.routers.adfree-gui.tls.certresolver=lets-encrypt"
       - "traefik.http.services.adfree-gui.loadbalancer.server.port=80"
 
       # DNS-over-TLS
-      - "traefik.tcp.routers.dnsovertls.rule=HostSNI(`adfree.{{hostname}}`)"
+      - "traefik.tcp.routers.dnsovertls.rule=HostSNI(`adguard.{{hostname}}`)"
       - "traefik.tcp.routers.dnsovertls.entrypoints=dnsovertls"
       - "traefik.tcp.routers.dnsovertls.tls=true"
       - "traefik.tcp.routers.dnsovertls.tls.certresolver=lets-encrypt"
@@ -123,6 +123,30 @@ services:
   #     - "traefik.udp.routers.udpdns.entrypoints=udpdns"
   #     - "traefik.udp.routers.udpdns.service=blocky"
   #     - "traefik.udp.services.blocky.loadbalancer.server.port=53"
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    networks:
+      - traefik_proxy
+    restart: {{dockerrestartpolicy}}
+    environment:
+      - TZ={{ntp_timezone}}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /srv/docker/portainer:/data
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik_proxy
+      - traefik.http.routers.portainer.rule=Host(`portainer.{{hostname}}`)
+      - traefik.http.routers.portainer.entrypoints=websecure
+      - traefik.http.routers.portainer.tls=true
+      - traefik.http.routers.portainer.tls.certresolver=lets-encrypt
+      - traefik.http.routers.portainer.service=portainer
+      - traefik.http.routers.portainer.middlewares=middlewares-ipwhitelist@file, middlewares-compress@file
+      - traefik.http.services.portainer.loadbalancer.server.port=9443
+      - traefik.http.services.portainer.loadbalancer.server.scheme=https
+
 
   unbound:
     image: crazymax/unbound
