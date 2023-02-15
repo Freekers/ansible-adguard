@@ -10,6 +10,7 @@ folders:
   - traefik2/acme
 
 adguardwebuser: "admin"
+adguardwebpassword: "P@$$w0rd"
 
 # Needed for letsencrypt
 emailaddress: "makesurethisischanged@email.com"

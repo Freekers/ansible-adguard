@@ -61,18 +61,6 @@
   tags:
     - test
 
-- name: Deploy Stack using Docker Compose
-  become: true
-  ansible.builtin.shell:
-    cmd: "docker compose -f docker-compose.yml up -d"
-    chdir: /srv/docker
-  tags:
-    - test
-
-- name: Set adguard webuser password
-  ansible.builtin.ansible.builtin.set_fact:
-    adguardwebpassword: "{{ lookup('password', '/dev/null length=15 chars=ascii_letters,digits,punctuation') }}"
-
 - name: Generate hash for Adguard admin password
   ansible.builtin.command: htpasswd -B -n -b {{ adguardwebuser }} {{ adguardwebpassword }}
   register: htpasswd_generate
@@ -82,3 +70,11 @@
     path: /srv/docker/adguard/conf/AdGuardHome.yaml
     regexp: "adguardwebpassword"
     replace: "{{ htpasswd_generate.stdout.split(':')[1] }}"
+
+- name: Deploy Stack using Docker Compose
+  become: true
+  ansible.builtin.shell:
+    cmd: "docker compose -f docker-compose.yml up -d"
+    chdir: /srv/docker
+  tags:
+    - test
