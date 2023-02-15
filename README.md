@@ -33,7 +33,7 @@ If all you're looking for is an adblocking DNS service, please consider using [A
 3. You _must_ setup an A (and AAAA record if IPv6 DNS resolution is desired) for your domain, pointing to the IP address of your Linux server.  
    This is required to generate a valid ZeroSSL SSL Certificate and used for DoH & DoT.\
 
-4. You _must_ create 2 cnames: `traefik`, `adguard` and `portainer` this is needed for traefik as a reverse proxy provider. So you will connect to: `adguard.example.com` but you can also use `traefik.example.com` and `portainer.example.com`.
+4. You _must_ create 3 cnames: `traefik`, `adguard` and `portainer` this is needed for traefik as a reverse proxy provider. So you will connect to: `adguard.example.com` but you can also use `traefik.example.com` and `portainer.example.com`.
 
 ## Installation Instructions
 
