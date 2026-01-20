@@ -34,8 +34,8 @@ http:
         average: 100
         burst: 50
 
-    middlewares-ipwhitelist:
-      ipWhiteList:
+    middlewares-ipallowlist:
+      ipAllowList:
         sourceRange:
           - 172.27.0.0/12
 
